@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from adventure.models import Journey
+
 from .notifiers import Notifier
 from .repositories import JourneyRepository
 
@@ -24,4 +26,21 @@ class StartJourney:
         return journey
 
     class CantStart(Exception):
+        pass
+
+class StopJourney:
+    def __init__(self, repository: JourneyRepository):
+        self.repository = repository        
+
+    def set_params(self, data: dict) -> StopJourney:
+        self.data = data
+        return self
+
+    def execute(self, journey) -> None:        
+        journey = self.repository.stop_journey(journey)
+        if not journey:
+            raise StopJourney.CantStop("vehicle can't stop")        
+        return journey
+    
+    class CantStop(Exception):
         pass

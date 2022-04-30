@@ -19,3 +19,12 @@ class JourneyRepository:
         return models.Journey.objects.create(
             vehicle=vehicle, start=timezone.now().date()
         )
+
+    def stop_journey(self, journey):
+        dict_journey = dict(journey.data)        
+        id_jorney = dict_journey['id']
+        end = models.Journey.objects.filter(id=id_jorney).update(end=timezone.now().date())
+        if end:
+            return models.Journey.objects.filter(id=id_jorney)
+        else:
+            raise Exception('Error in update jorney')
